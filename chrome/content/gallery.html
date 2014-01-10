@@ -1,0 +1,60 @@
+<html>
+<head>
+</head>
+<body>
+	<script type="text/javascript">
+		function AdjustURL(current_url, delta_fx, quick) {
+			var re_result = /(\d+)(\D*)$/.exec(current_url);
+			if(re_result) {
+				var old_num_str = re_result[1];
+				var old_num = parseInt(old_num_str, 10);
+				var new_num = delta_fx(old_num);
+				var new_num_str = new_num.toString();
+				var shorter = (old_num_str[0] != 0) && (old_num.toString().length > new_num_str.length);
+				//assume that we need padding, make the new string
+				while(new_num_str.length < old_num_str.length) { 
+					new_num_str = "0" + new_num_str;
+				}
+				if(shorter && !quick) { //maybe pad
+					var client = new XMLHttpRequest();
+					client.open("HEAD", RegExp.leftContext + new_num_str + re_result[2], false);
+					client.send(null);
+					if(client.readyState != 4 || client.status != 200) //needed padding
+						new_num_str = new_num.toString(); //no padding
+				}
+				return(RegExp.leftContext + new_num_str + re_result[2]);
+			}
+			return("");
+		}
+		
+		var text;
+		var current_url;
+		var new_url;
+		var new_window;
+		const HEIGHT = 3;
+		const WIDTH = 7;
+		
+		current_url = window.content.document.location;
+		var re_result = /(.*)\?(.+)$/.exec(current_url);
+		if(re_result) {
+			my_url = re_result[1];
+			current_url = re_result[2];
+			new_url = AdjustURL(current_url, function (x) {return(x-(WIDTH*HEIGHT-1)/2>=1?x-(WIDTH*HEIGHT-1)/2:1);}, 0);
+			text = "<html><head></head><body>";
+			text += "<a href='" + my_url + "?" + AdjustURL(new_url, function (x) {return(x-(WIDTH*HEIGHT+1)/2>=1?x-(WIDTH*HEIGHT+1)/2:1);}, 0) + "'>&lt;</a>"
+			text += "<a href='" + my_url + "?" + AdjustURL(new_url, function (x) {return(x+(3*WIDTH*HEIGHT-1)/2);}, 0) + "'>&gt;</a>"
+			text += "<br>";
+			text += "<table border=1 width='100%'>";
+			for(var i = 0; i < HEIGHT; i++) {
+				text += "<tr>";
+				for(var j = 0; j < WIDTH; j++) {
+					text += "<td><a href='" + new_url + "'><img width='100%' src='" + new_url + "'></a></td>";
+					new_url = AdjustURL(new_url, function (x) {return(x+1);}, 0);
+				}
+				text += "</tr>";
+			}
+			document.write(text);
+		}
+	</script>
+</body>
+</html>

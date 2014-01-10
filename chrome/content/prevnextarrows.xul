@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://prevnextarrows/content/prevnextarrows.css"?>
+<overlay id="prevnextarrows" 
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="chrome://prevnextarrows/content/prevnextarrows.js" />
+	<statusbar id="status-bar">
+		<statusbarpanel id="PrevNextArrows">
+			<div id="ThumbsArrow" style="cursor: pointer"
+				onmousemove='this.tooltipText = "chrome://prevnextarrows/content/gallery.html?" + window.content.document.location;'
+				onclick='eyal0.prevnextarrows.DoClickThumbs(event);'>#</div>
+			<div id="StartArrow" style="cursor: pointer"
+				onmousemove='this.tooltipText = eyal0.prevnextarrows.AdjustURL(window.content.document.location, function (x) {return(  1);}, 1);'
+				onclick='eyal0.prevnextarrows.DoClickFirst(event);'>&#x21BA;</div>
+			<div id="PrevArrow" style="cursor: pointer"
+				onmousemove='this.tooltipText = eyal0.prevnextarrows.AdjustURL(window.content.document.location, function (x) {return(x-1);}, 1);'
+				onclick='eyal0.prevnextarrows.DoClickPrev(event);'>&lt;</div>
+			<div id="NextArrow" style="cursor: pointer"
+				onmousemove='this.tooltipText = eyal0.prevnextarrows.AdjustURL(window.content.document.location, function (x) {return(x+1);}, 1);'
+				onclick='eyal0.prevnextarrows.DoClickNext(event);'>&gt;</div>
+		</statusbarpanel>
+	</statusbar>
+</overlay>
